@@ -1,0 +1,418 @@
+LayerViews:
+  Waveguide:
+    layer: [10, 1]
+    width: 1
+    color: "#ff80a8"
+  Waveguides_SiSiN:
+    group_members:
+      RIB_:
+        layer: [10, 0]
+        layer_in_name: true
+        frame_color: "#ff80a8"
+        fill_color: "#ff80a8"
+        width: 2
+      GRAT_:
+        layer: [11, 0]
+        layer_in_name: true
+        frame_color: "magenta"
+        fill_color: "magenta"
+        width: 1
+      SLAB_:
+        layer: [12, 0]
+        layer_in_name: true
+        frame_color: "#ff80a8"
+        fill_color: "#ff80a8"
+        transparent: true
+        width: 2
+      WG_SiN_:
+        layer: [50, 0]
+        layer_in_name: true
+        frame_color: "purple"
+        fill_color: "purple"
+        width: 2
+      SiNwg1_:
+        layer: [54, 0]
+        layer_in_name: true
+        frame_color: "purple"
+        fill_color: "purple"
+        width: 2
+  Doping_Epitaxial_growth:
+    group_members:
+      PP_PD_:
+        layer: [20, 0]
+        layer_in_name: true
+        frame_color: "#9e9eff"
+        fill_color: "#9e9eff"
+        width: 0
+      PCONT_:
+        layer: [21, 0]
+        layer_in_name: true
+        frame_color: "blue"
+        fill_color: "blue"
+        fill_brightness: 1
+        width: 0
+      NCONT_:
+        layer: [22, 0]
+        layer_in_name: true
+        frame_color: "red"
+        fill_color: "red"
+        width: 0
+      PIM_:
+        layer: [23, 0]
+        layer_in_name: true
+        frame_color: "blue"
+        fill_color: "blue"
+        fill_brightness: 1
+        width: 0
+      NIM_:
+        layer: [24, 0]
+        layer_in_name: true
+        frame_color: "red"
+        fill_color: "red"
+        width: 0
+      IPD_:
+        layer: [25, 0]
+        layer_in_name: true
+        frame_color: "blue"
+        fill_color: "blue"
+        fill_brightness: 1
+        width: 0
+      IND_:
+        layer: [26, 0]
+        layer_in_name: true
+        frame_color: "red"
+        fill_color: "red"
+        width: 0
+      GeEP_:
+        layer: [40, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "#ada049"
+        width: 0
+      NPPGE_:
+        layer: [41, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "#ff551e"
+        width: 0
+      PPPGE_:
+        layer: [42, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "blue"
+        width: 0
+  Metal:
+    group_members:
+      VIA1_:
+        layer: [100, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "#8c848c"
+        transparent: true
+        width: 2
+      MT1_:
+        layer: [105, 0]
+        layer_in_name: true
+        frame_color: "#805000"
+        fill_color: "#b77233"
+        transparent: true
+        width: 1
+      HTR_:
+        layer: [115, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "#ede500"
+        transparent: true
+        width: 0
+      VIA2_:
+        layer: [120, 0]
+        layer_in_name: true
+        frame_color: "black"
+        fill_color: "#00ffe5"
+        transparent: true
+        width: 2
+      MT2_:
+        layer: [125, 0]
+        layer_in_name: true
+        frame_color: "#8000ff"
+        fill_color: "#8000ff"
+        transparent: true
+        width: 1
+      PAD_:
+        layer: [150, 0]
+        layer_in_name: true
+        frame_color: "#0080ff"
+        fill_color: "#0080ff"
+        width: 1
+  LABEL_:
+    layer: [80, 0]
+    layer_in_name: true
+    color: "magenta"
+  OX_OPEN_:
+    layer: [151, 0]
+    layer_in_name: true
+    color: "#004080"
+  SiNwin_:
+    layer: [53, 0]
+    layer_in_name: true
+    color: "#ff0080"
+  DTR_:
+    layer: [160, 0]
+    layer_in_name: true
+    width: 0
+    color: "#3b3b3b"
+  BlackBox:
+    group_members:
+      BLACKBOX_:
+        layer: [1001, 0]
+        layer_in_name: true
+        frame_color: "#004080"
+        fill_color: "#004080"
+        width: 1
+      BB_LABEL_:
+        layer: [1002, 0]
+        layer_in_name: true
+        frame_color: "teal"
+        fill_color: "teal"
+      BB_OP_SI_:
+        layer: [1010, 0]
+        layer_in_name: true
+        frame_color: "#ff80a8"
+        fill_color: "#ff80a8"
+        width: 2
+      BB_OP_SIN_:
+        layer: [1011, 0]
+        layer_in_name: true
+        frame_color: "purple"
+        fill_color: "purple"
+        width: 2
+      BB_EP_:
+        layer: [1020, 0]
+        layer_in_name: true
+        frame_color: "#500080"
+        fill_color: "#500080"
+        width: 1
+      BB_MT1_:
+        layer: [1021, 0]
+        layer_in_name: true
+        frame_color: "#805000"
+        fill_color: "#b77233"
+        transparent: true
+        width: 1
+      BB_MT2_:
+        layer: [1022, 0]
+        layer_in_name: true
+        frame_color: "#8000ff"
+        fill_color: "#8000ff"
+        transparent: true
+        width: 1
+  SiEPIC:
+    group_members:
+      Lumerical:
+        layer: [733, 0]
+        frame_color: "#800057"
+        fill_color: "#800057"
+        width: 3
+      PinRec:
+        layer: [997, 0]
+        frame_color: "#004080"
+        fill_color: "#004080"
+        width: 3
+      DevRec:
+        layer: [998, 0]
+        frame_color: "#004080"
+        fill_color: "#004080"
+        transparent: true
+        width: 1
+      PinRecM:
+        layer: [999, 10]
+        frame_color: "#006080"
+        fill_color: "#006080"
+        width: 2
+      FbrTgt:
+        layer: [951, 0]
+        frame_color: "#004080"
+        fill_color: "#004080"
+        width: 2
+      Errors:
+        layer: [999, 0]
+        frame_color: "#805000"
+        fill_color: "navy"
+        width: 3
+        marked: true
+  Dummy_fill:
+    group_members:
+      TR_:
+        layer: [10, 4]
+        layer_in_name: true
+        frame_color: "red"
+        fill_color: "red"
+      TM1_:
+        layer: [105, 4]
+        layer_in_name: true
+        frame_color: "#508000"
+        fill_color: "#508000"
+      TN_:
+        layer: [50, 4]
+        layer_in_name: true
+        frame_color: "lime"
+        fill_color: "lime"
+  CMC:
+    group_members:
+      FP_:
+        layer: [82, 0]
+        layer_in_name: true
+        frame_color: "#8000ff"
+        fill_color: "#8000ff"
+        width: 3
+      Text:
+        layer: [1003, 0]
+        frame_color: "#008050"
+        fill_color: "#008050"
+      DRCexclude_:
+        layer: [1004, 0]
+        layer_in_name: true
+        frame_color: "red"
+        fill_color: "red"
+        xfill: true
+      Si_KO_:
+        layer: [90, 0]
+        layer_in_name: true
+        frame_color: "#01ff6b"
+        fill_color: "#01ff6b"
+        transparent: true
+        width: 3
+      MT1_KO_:
+        layer: [80, 0]
+        layer_in_name: true
+        frame_color: "#01ff6b"
+        fill_color: "#01ff6b"
+        transparent: true
+        width: 3
+      Si_Tiles_:
+        layer: [190, 0]
+        layer_in_name: true
+        frame_color: "#ff80a8"
+        fill_color: "#ff80a8"
+      MT1_Tiles_:
+        layer: [191, 0]
+        layer_in_name: true
+        frame_color: "#78ffe8"
+        fill_color: "#78ffe8"
+CustomDitherPatterns:
+  LINES_H_BOLD:
+    order: 1
+    custom_pattern: |-
+      ................
+      ................
+      ****************
+      ****************
+      ................
+      ................
+      ****************
+      ****************
+      ................
+      ................
+      ****************
+      ****************
+      ................
+      ................
+      ****************
+      ****************
+  FILLED:
+    order: 2
+    custom_pattern: |-
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+      ****************
+  DOTS:
+    order: 3
+    custom_pattern: |-
+      .*...*...*...*..
+      ................
+      ...*...*...*...*
+      ................
+      .*...*...*...*..
+      ................
+      ...*...*...*...*
+      ................
+      .*...*...*...*..
+      ................
+      ...*...*...*...*
+      ................
+      .*...*...*...*..
+      ................
+      ...*...*...*...*
+      ................
+  LINES_DIAG_R:
+    order: 4
+    custom_pattern: |-
+      *.......*.......
+      .*.......*......
+      ..*.......*.....
+      ...*.......*....
+      ....*.......*...
+      .....*.......*..
+      ......*.......*.
+      .......*.......*
+      *.......*.......
+      .*.......*......
+      ..*.......*.....
+      ...*.......*....
+      ....*.......*...
+      .....*.......*..
+      ......*.......*.
+      .......*.......*
+  LINES_V_DENSE:
+    order: 5
+    custom_pattern: |-
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+      .*.*.*.*.*.*.*.*
+  IM:
+    order: 6
+    custom_pattern: |-
+      **..
+      *...
+      ....
+      ...*
+  IMP:
+    order: 7
+    custom_pattern: |-
+      .**.
+      **..
+      *...
+      ....
+  IMPP:
+    order: 8
+    custom_pattern: |-
+      ..**
+      .***
+      **..
+      **..
