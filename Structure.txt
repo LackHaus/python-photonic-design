@@ -1,0 +1,15 @@
+Fundamental Cells (Level0):
+#CUSTOM#
+-Ring(Waveguide width, Radius, Layer)
+-StraightWaveguide(Length, Waveguide width, Layer)
+#BlackBoxes#
+-AMF_EdgeCoupler
+-AMF_PBRS
+-AMF_PD
+-AMF_MMI1x2
+
+
+Level1
+-RingStage(Rings(2), Gap or Gaps(3), Width of Widths(2))
+-RingHeater(Ring, Heater Width, Heater Discontinuity, Legs_Dimension)
+

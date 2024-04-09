@@ -24,22 +24,19 @@ def disp_layers():
         print(i, PDK.layers[i])
 
 print("Using "+PDK.name+"'s PDK\n")
-print(PDK.layers)
 disp_layers()
 
 ## Parameter Definition
-# Ring radii (will become a list eventually)
-ring_radii = [7, 7, 7, 7]
-# Ring gaps for stage 1 (will become a list eventually)
-ring_gaps_1 = [0.3, 1, 0.6]
-# Ring gaps for stage 2 (will become a list eventually)
-ring_gaps_2 = [2, 3, 0.1]
+# Ring radii for stage (will become a list eventually)
+ring_radii = [10, 4, 6, 6]
+# Ring gaps (will become a list eventually)
+ring_gaps = [1, 2, 0.3, 0.5, 1, 0.5]
 # Ring heater width (will probably remain constant)
-heater_width = 0.5
+heater_width = 2
 # Ring heater discontinuity: The distance between V+ and GND ports on the ring heater
 ring_heater_discontinuity = 3
 # Waveguide width 
-wg_width = 0.5
+wg_width = 1
 # Heater via dimensions
 htr_via_size = (1, 6)
 
@@ -53,55 +50,67 @@ edge_coupler_left = PDK.get_component("AMF_Si_EdgeCoupler_Cband_v3p0_SiEPIC")
 mmi_1x2 = PDK.get_component("AMF_Si_1X2MMI_Cband_v3p0_SiEPIC")
 # AMF Polarization Beam Rotator Splitter blackbox instance
 pbrs = PDK.get_component("AMF_Si_PBRS_Cband_v3p0_SiEPIC")
-phase_shifter = PDK.get_component("AMF_Si_TOPhaseShifter1_Cband_v3p0_SiEPIC")
-
-
-# CUSTOM CELLS
-#------------#
-ring_stage_1 = gf.components.ring_crow(radius=[ring_radii[0], ring_radii[1]], gaps = [ring_gaps_1[0], ring_gaps_1[1], ring_gaps_1[2]])
-ring_stage_2 = gf.components.ring_crow(radius=[ring_radii[2], ring_radii[3]], gaps = [ring_gaps_2[0], ring_gaps_2[1], ring_gaps_2[2]])
-
 
 # Building a ring heater Layer 223 si dummy for boolean operations
-def build_ring_heater_HTR(r, htr_width, htr_disc, l="HTR_", via_dim=(1, 4)):
+def build_ring_heater(r, htr_width, htr_disc, l="HTR_", via_dim=(1, 4)):
     dy = np.sqrt((r-htr_width/2)**2 - htr_disc**2/4)
-    part_ring_heater = gf.Component()
+    part_ring_heater = gf.Component("d")
     part_ring_heater.add_ref(gf.components.ring(radius=r, width=htr_width, layer=l))
-    square_ring_heater = gf.Component()
+    square_ring_heater = gf.Component("f")
     square_ring_heater.add_ref(gf.components.rectangle((htr_disc,4*htr_width), layer=l)).move((-htr_disc/2, -r-2*htr_width))
-    square_via = gf.Component()
+    square_via = gf.Component("g")
     square_via.add_ref(gf.components.rectangle(via_dim, layer=l))
-    c = gf.Component()
+    c = gf.Component("h")
     c.add_ref(gf.geometry.boolean(A=part_ring_heater, B=square_ring_heater, operation="not", layer=l))
     c.add_ref(square_via).move((htr_disc/2 - via_dim[0],-dy-via_dim[1]))
     c.add_ref(square_via).move((-htr_disc/2,-dy-via_dim[1]))
     c = c.rotate(90)
     return c
 
-# Stage 1 Cell Definition
-stage_1 = gf.Component()
-ring_heater_htr_0 = build_ring_heater_HTR(ring_radii[0], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
-ring_heater_htr_1 = build_ring_heater_HTR(ring_radii[1], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
-stage_1.add_ref(ring_heater_htr_0).movey(ring_gaps_1[0]+ring_radii[0]+wg_width)
-stage_1.add_ref(ring_heater_htr_1).movey(ring_gaps_1[0]+ring_radii[0]+wg_width+2*ring_radii[1]+ring_gaps_1[1]+wg_width)
-stage_1.add_ref(ring_stage_1)
+def change_layer(comp, l):
+    generic_component = gf.Component()
+    merged_component = gf.geometry.boolean(A=comp, B=generic_component, operation="or", layer=l)
+    return merged_component
+
+def build_ring_stage(stage, ring_radii_=ring_radii, ring_gaps_=ring_gaps, wg_width_=wg_width, layer_="RIB_"):
+
+    ring_stage = gf.Component("Ring Stage "+str(stage))
+    if stage == 1:
+        ring_0 = gf.components.ring(radius=ring_radii_[0], width=wg_width_, angle_resolution=2.5, layer=layer_, angle=360)
+        ring_1 = gf.components.ring(radius=ring_radii_[1], width=wg_width_, angle_resolution=2.5, layer=layer_, angle=360)
+        wg_1 = gf.components.straight(length = wg_width_+2*np.max([ring_radii_[0], ring_radii_[1]]), width=wg_width_)
+        ring_stage.add_ref(wg_1)
+        ring_stage.add_ref(ring_0).move((wg_width_/2+np.max([ring_radii_[0], ring_radii_[1]]), ring_radii_[0]+wg_width_+ring_gaps_[0]))
+        ring_stage.add_ref(ring_1).move((wg_width_/2+np.max([ring_radii_[0], ring_radii_[1]]), 2*ring_radii_[0]+wg_width_+ring_gaps_[0]+ring_radii_[1]+ring_gaps_[1]+wg_width_))
+        ring_stage.add_ref(wg_1).movey(2*ring_radii_[0]+wg_width_+ring_gaps_[0]+2*ring_radii_[1]+ring_gaps_[1]+wg_width_+ring_gaps_[2]+wg_width_)
+
+    elif stage == 2:
+        ring_0 = gf.components.ring(radius=ring_radii_[2], width=wg_width_, angle_resolution=2.5, layer=layer_, angle=360)
+        ring_1 = gf.components.ring(radius=ring_radii_[3], width=wg_width_, angle_resolution=2.5, layer=layer_, angle=360)
+        wg_1 = gf.components.straight(length = wg_width_+2*np.max([ring_radii_[2], ring_radii_[3]]), width=wg_width_)
+        ring_stage.add_ref(wg_1)
+        ring_stage.add_ref(ring_0).move((wg_width_/2+np.max([ring_radii_[2], ring_radii_[3]]), ring_radii_[2]+wg_width_+ring_gaps_[3]))
+        ring_stage.add_ref(ring_1).move((wg_width_/2+np.max([ring_radii_[2], ring_radii_[3]]), 2*ring_radii_[2]+wg_width_+ring_gaps_[3]+ring_radii_[3]+ring_gaps_[4]+wg_width_))
+        ring_stage.add_ref(wg_1).movey(2*ring_radii_[2]+wg_width_+ring_gaps_[3]+2*ring_radii_[3]+ring_gaps_[4]+wg_width_+ring_gaps_[5]+wg_width_)
+
+    return ring_stage
+
+def build_ring_stage_heater(stage, ring_radii_=ring_radii, ring_gaps_=ring_gaps, wg_width_=wg_width, layer_="HTR_"):
+    stage_2 = gf.Component("2")
+    ring_heater_htr_2 = build_ring_heater(ring_radii_[2], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
+    ring_heater_htr_3 = build_ring_heater(ring_radii_[3], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
+    stage_2.add_ref(ring_heater_htr_2).movey(ring_gaps_[3]+ring_radii_[2]+wg_width_)
+    stage_2.add_ref(ring_heater_htr_3).movey(ring_gaps_[3]+ring_radii_[2]+wg_width_+2*ring_radii_[3]+ring_gaps_[4]+wg_width_)
+    return stage_2
+
+def build_stage(stage, ring_radii_=ring_radii, ring_gaps_=ring_gaps, wg_width_=wg_width):
+    stage = gf.Component("1")
+    ring_stage = build_ring_stage(stage, ring_radii_, ring_gaps_, wg_width_)
+    ring_heater_stage = build_ring_stage_heater(stage, ring_radii_, ring_gaps_, wg_width_)
+    stage.add_ref(ring_stage)
+    stage.add_ref(ring_heater_stage).movex(-1*np.max([ring_radii_[2], ring_radii_[3]])-wg_width_/2)
+    return stage
 
 # Stage 2 Cell Definition
-stage_2 = gf.Component()
-ring_heater_htr_2 = build_ring_heater_HTR(ring_radii[2], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
-ring_heater_htr_3 = build_ring_heater_HTR(ring_radii[3], heater_width, ring_heater_discontinuity, via_dim=htr_via_size)
-stage_2.add_ref(ring_heater_htr_0).movey(ring_gaps_2[0]+ring_radii[2]+wg_width)
-stage_2.add_ref(ring_heater_htr_1).movey(ring_gaps_2[0]+ring_radii[2]+wg_width+2*ring_radii[3]+ring_gaps_2[1]+wg_width)
-stage_2.add_ref(ring_stage_2)
-
-# Top Cell Construction 
-TOP = gf.Component("TOP")
-TOP.add_ref(stage_1)
-TOP.add_ref(stage_2).movex(50)
-TOP.show()
-
-
-
-
-
+build_ring_stage(2).show()
 
