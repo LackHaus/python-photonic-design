@@ -18,26 +18,9 @@ from gdsfactory.technology import (
 )
 from gdsfactory.typings import Layer
 from gdsfactory.config import print_version_pdks, print_version_plugins
+from builds import *
 
-def disp_layers():
-    for i in PDK.layers:
-        print(i, PDK.layers[i])
+x = build_ring("testring", 0.5, 5, "RIB_")
 
-print("Using "+PDK.name+"'s PDK\n")
-disp_layers()
 
-#LEVEL 0
-def build_ring(name, width, radius, layer):
-    c = gf.Component(name)
-    ring = gf.component.ring(radius, width, layer)
-    c.add_ref(ring)
-    return c
-
-def build_straight(name, length, width, layer):
-    c = gf.Component(name)
-    straight = gf.components.straight(length, width=width, layer=layer)
-    c.add_ref(straight)
-    return c
-
-#LEVEL 1
-
+print(type([]) == list)
