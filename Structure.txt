@@ -1,22 +1,3 @@
-SILICON LAYER (RIB)
-Level0
-DONE
-    -Ring(Waveguide width, Radius, Layer)
-    -StraightWaveguide(Length, Waveguide width, Layer)
-    #BlackBoxes#
-    -AMF_EdgeCoupler
-    -AMF_PBRS
-    -AMF_MMI1x2
-    -Termination (taper)
-MISSING
-    
-
-
-
-Level1
-DONE
-    -RingStage(Rings(2), Gap or Gaps(3), Width of Widths(2))
-
-Level2
-MISSING
-    -RingStages(Stages(2), )
+ToDo
+- Ports on custom cells
+- MMI fan out
