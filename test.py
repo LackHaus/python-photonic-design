@@ -18,9 +18,11 @@ from gdsfactory.technology import (
 )
 from gdsfactory.typings import Layer
 from gdsfactory.config import print_version_pdks, print_version_plugins
-from builds import *
 
-x = build_ring("testring", 0.5, 5, "RIB_")
+def disp_layers():
+    for i in PDK.layers:
+        print(i, PDK.layers[i])
 
+print("Using "+PDK.name+"'s PDK\n")
+disp_layers()
 
-print(type([]) == list)
