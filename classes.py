@@ -33,30 +33,13 @@ LEVEL 0 : Represent all the fundamental cells,
 each subsequent level refers to the previous
 ---------------------------------------------"""
 
-"""Definition of the AMF CBand EdgeCoupler BlackBox cell"""
-class AMF_EdgeCoupler_CBand(Cell):
-    def __init__(self, name_="AMF_Si_EdgeCoupler_Cband_v3p0_SiEPIC", orientation_=0):
-        self.name = name_
-        self.orientation = orientation_
-        self.inst = PDK.get_component(self.name).rotate(self.orientation)
+"""AMF blackboxes don't work well when transformed in classes,
+ too many references and dependencies"""
 
+amf_edgecoupler_cband = PDK.get_component("amf_Edge_Coupler_1550").rotate(180)
+amf_1x2mmi_cband = PDK.get_component("AMF_Si_1X2MMI_Cband_v3p0_SiEPIC")
+amf_pbrs_cband = PDK.get_component("AMF_Si_PBRS_Cband_v3p0_SiEPIC")
 
-"""Definition of the AMF CBand EdgeCoupler BlackBox cell"""
-class AMF_MMI1x2_CBand(Cell):
-    def __init__(self, name_="AMF_Si_1X2MMI_Cband_v3p0_SiEPIC", orientation_=0):
-        self.name = name_
-        self.inst = PDK.get_component(self.name)
-        self.orientation = orientation_
-        self.inst.add_ref(PDK.get_component(self.name)).rotate(self.orientation)
-
-
-"""Definition of the AMF CBand EdgeCoupler BlackBox cell"""
-class AMF_PBRS_CBand(Cell):
-    def __init__(self, name_="AMF_Si_PBRS_Cband_v3p0_SiEPIC", orientation_=0):
-        self.name = name_
-        self.inst = PDK.get_component(self.name)
-        self.orientation = orientation_
-        self.inst.add_ref(PDK.get_component(self.name)).rotate(self.orientation)
 
 """Definition of the Ring Resonator cell"""
 class Ring(Cell):
@@ -89,7 +72,6 @@ class Taper(Cell):
         self.inst = gf.Component(self.name)
         self.inst.add_ref(gf.components.taper(self.lenght, self.width1, self.width2, layer="RIB_"))
 
-
 """---------------------------------------------
 LEVEL 1
 ---------------------------------------------"""
@@ -113,3 +95,16 @@ class SecondOrderRing(Cell):
         d[1] = d[1] + self.rings[0].radius + self.width + self.rings[1].radius + self.gaps[1]
         self.inst.add_ref(self.rings[1].inst).move((d[0], d[1]))
         self.inst.add_ref(wg.inst).movey(d[1] + self.rings[1].radius + self.gaps[2] + self.width)
+
+class MMI1x2Stage(Cell):
+    def __init__(self, stage_=2, dy_=50, mmi_=amf_1x2mmi_cband):
+        self.stage = stage_
+        self.mmi = mmi_
+        self.name = "MMI_1x2_stage"+str(self.stage)
+        self.dy = dy_
+        self.inst = gf.Component(self.name)
+        for i in range(int(2**(self.stage - 1))):
+            self.inst.add_ref(self.mmi).movey(i*self.dy)
+
+
+MMI1x2Stage(4).show()
