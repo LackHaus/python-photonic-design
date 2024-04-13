@@ -18,6 +18,7 @@ from gdsfactory.technology import (
 )
 from gdsfactory.typings import Layer
 from gdsfactory.config import print_version_pdks, print_version_plugins
+import random
 
 """Defining a generic cell class for show() or other methods shared by all the cells
 Hopefully it won't mess anything up later..."""
@@ -38,7 +39,7 @@ each subsequent level refers to the previous
 
 class AMF_EdgeCoupler_CBand(Cell):
     def __init__(self, name_="amf_Edge_Coupler_1550", x_=251.3, y_=100) :
-        self.name = name_
+        self.name = str(random.randrange(1000))
         self.x = x_
         self.y = y_
         self.inst = gf.Component(self.name)
@@ -169,19 +170,43 @@ class MMIFanout(Cell):
             self.inst.add_ref((self.stages[c]).inst).movex(c*self.dx)
 
 TOP = gf.Component()
-mmi_fanout_obj = MMIFanout()       
+mmi_fanout_obj = MMIFanout()      
+TOP.add_ref(mmi_fanout_obj.inst)
 
-print(mmi_fanout_obj.stages[0].mmis[0].comp.ports)
 
+for i in mmi_fanout_obj.stages:
+    for j in i.mmis:
+        print(j)
 
-for c,v in enumerate(mmi_fanout_obj.stages[:-1]):
-    for cc,vv in enumerate(v.mmis):
-        route = gf.routing.get_route(mmi_fanout_obj.stages[c].mmis[cc].comp.ports["o2"], mmi_fanout_obj.stages[c+1].mmis[cc].comp.ports["o1"])
-        route2 = gf.routing.get_route(mmi_fanout_obj.stages[c].mmis[cc].comp.ports["o3"], mmi_fanout_obj.stages[c+1].mmis[cc].comp.ports["o1"])
+route = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o2"],
+                                        mmi_fanout_obj.stages[1].mmis[0].comp.ports["o1"])
 
-        TOP.add(route.references)    
-        TOP.add(route2.references)   
+"""route2 = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o3"],
+                                        mmi_fanout_obj.stages[1].mmis[1].comp.ports["o1"])
+route3 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[0].comp.ports["o2"],
+                                        mmi_fanout_obj.stages[2].mmis[0].comp.ports["o1"])
+route4 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[0].comp.ports["o3"],
+                                        mmi_fanout_obj.stages[2].mmis[1].comp.ports["o1"])
+route5 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[1].comp.ports["o2"],
+                                        mmi_fanout_obj.stages[2].mmis[2].comp.ports["o1"])
+route6 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[1].comp.ports["o3"],
+                                        mmi_fanout_obj.stages[2].mmis[3].comp.ports["o1"])
 
-TOP.add_ref(mmi_fanout_obj)
+TOP.add(route2.references)
+TOP.add(route3.references)
+TOP.add(route4.references)
+TOP.add(route5.references)
+TOP.add(route6.references)
 
+"""
+TOP.add(route.references)
 TOP.show()
+
+
+a = AMF_1x2MMI_CBand()
+b = AMF_1x2MMI_CBand()
+c = AMF_1x2MMI_CBand()
+
+print(a, b, c)
+
+"""Okay, so instantiated objects are independent (stored at different addresses)"""
