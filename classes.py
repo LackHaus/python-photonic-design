@@ -70,23 +70,6 @@ class AMF_PBRS_CBand(Cell):
     def show(self):
         self.comp.show()
 
-"""
-a = gf.Component()
-amf_edgecoupler_cband_ref = a.add_ref(PDK.get_component("amf_Edge_Coupler_1550"))
-amf_edgecoupler_cband_ref.x = 100
-amf_edgecoupler_cband_comp = PDK.get_component("amf_Edge_Coupler_1550")
-
-b = gf.Component()
-amf_1x2mmi_cband_ref = b.add_ref(PDK.get_component("AMF_Si_1X2MMI_Cband_v3p0_SiEPIC"))
-amf_1x2mmi_cband_ref.x = 80
-amf_1x2mmi_cband_comp = PDK.get_component("AMF_Si_1X2MMI_Cband_v3p0_SiEPIC")
-
-c = gf.Component()
-amf_pbrs_cband_ref = c.add_ref(PDK.get_component("AMF_Si_PBRS_Cband_v3p0_SiEPIC"))
-amf_pbrs_cband_ref.x = 100
-amf_pbrs_cband_comp = PDK.get_component("AMF_Si_PBRS_Cband_v3p0_SiEPIC")
-"""
-
 """Definition of the Ring Resonator cell"""
 class Ring(Cell):
     def __init__(self, name_="R", radius_=10, width_=0.5, layer_="RIB_"):
@@ -169,10 +152,10 @@ class MMIFanout(Cell):
         for c,v in enumerate(self.stages):
             self.inst.add_ref((self.stages[c]).inst).movex(c*self.dx)
 
+"""
 TOP = gf.Component()
 mmi_fanout_obj = MMIFanout()      
 TOP.add_ref(mmi_fanout_obj.inst)
-
 
 for i in mmi_fanout_obj.stages:
     for j in i.mmis:
@@ -180,8 +163,7 @@ for i in mmi_fanout_obj.stages:
 
 route = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o2"],
                                         mmi_fanout_obj.stages[1].mmis[0].comp.ports["o1"])
-
-"""route2 = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o3"],
+route2 = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o3"],
                                         mmi_fanout_obj.stages[1].mmis[1].comp.ports["o1"])
 route3 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[0].comp.ports["o2"],
                                         mmi_fanout_obj.stages[2].mmis[0].comp.ports["o1"])
@@ -198,7 +180,8 @@ TOP.add(route4.references)
 TOP.add(route5.references)
 TOP.add(route6.references)
 
-"""
+
+
 TOP.add(route.references)
 TOP.show()
 
@@ -210,3 +193,5 @@ c = AMF_1x2MMI_CBand()
 print(a, b, c)
 
 """Okay, so instantiated objects are independent (stored at different addresses)"""
+
+"""
