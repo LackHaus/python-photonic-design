@@ -39,7 +39,7 @@ each subsequent level refers to the previous
 
 class AMF_EdgeCoupler_CBand(Cell):
     def __init__(self, name_="amf_Edge_Coupler_1550", x_=251.3, y_=100) :
-        self.name = str(random.randrange(1000))
+        self.name = name_
         self.x = x_
         self.y = y_
         self.inst = gf.Component(self.name)
@@ -53,11 +53,8 @@ class AMF_1x2MMI_CBand(Cell):
         self.name = name_
         self.x = x_
         self.y = y_
-        self.inst = gf.Component(self.name)
-        self.comp = PDK.get_component(self.name)
-        self.inst.add_ref(self.comp)
-    def show(self):
-        self.comp.show()
+        self.inst = PDK.get_component(self.name)
+
 
 class AMF_PBRS_CBand(Cell):
     def __init__(self, name_="AMF_Si_PBRS_Cband_v3p0_SiEPIC", x_=251.3, y_=100) :
@@ -96,10 +93,10 @@ class Taper(Cell):
         self.name = n
         self.width1 = w1
         self.width2 = w2
-        self.lenght = l
+        self.length = l
         self.layer = layer_
         self.inst = gf.Component(self.name)
-        self.inst.add_ref(gf.components.taper(self.lenght, self.width1, self.width2, layer="RIB_"))
+        self.inst.add_ref(gf.components.taper(self.length, self.width1, self.width2, layer="RIB_"))
 
 """---------------------------------------------
 LEVEL 1
@@ -128,18 +125,15 @@ class SecondOrderRing(Cell):
         self.inst.add_ref(wg.inst).movey(d[1] + self.rings[1].radius + self.gaps[2] + self.width)
 
 class MMI1x2Stage(Cell):
-    def __init__(self, stage_=2, dy_=50, mmi_=AMF_1x2MMI_CBand(),
+    def __init__(self, stage_=2, dy_=50, mmi_=[AMF_1x2MMI_CBand() for i in range(100)],
                   name_="MMI_1x2_stage"):
         self.stage = stage_
-        self.mmi = mmi_
-        self.mmis = []
-        for i in range(int(2**(self.stage-1))):
-            self.mmis.append(mmi_)
         self.name = name_+"_"+str(self.stage)
         self.dy = dy_
-        self.inst = gf.Component(self.name)
-        for i in range(int(2**(self.stage - 1))):
-            self.inst.add_ref(self.mmi.comp).movey(i*self.dy)
+        self.mmis = mmi_[:int(2**(self.stage-1))]
+        self.inst = gf.Component()
+        for i in range(int(2**(self.stage-1))):
+            self.inst.add_ref(self.mmis[i].inst).movey(i*self.dy)
 
 class MMIFanout(Cell):
     def __init__(self, stages_=[MMI1x2Stage(1), MMI1x2Stage(2),
@@ -180,18 +174,10 @@ TOP.add(route4.references)
 TOP.add(route5.references)
 TOP.add(route6.references)
 
-
-
 TOP.add(route.references)
 TOP.show()
 
 
-a = AMF_1x2MMI_CBand()
-b = AMF_1x2MMI_CBand()
-c = AMF_1x2MMI_CBand()
-
-print(a, b, c)
-
-"""Okay, so instantiated objects are independent (stored at different addresses)"""
-
 """
+
+
