@@ -34,3 +34,5 @@ route = gf.routing.get_route(mmi1_r.ports["o2"], mmi2_r.ports["o1"])
 top.add(route.references)
 
 top.show()
+
+"https://gdsfactory.github.io/gdsfactory/notebooks/01_references.html"
