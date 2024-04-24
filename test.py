@@ -19,10 +19,18 @@ from gdsfactory.technology import (
 from gdsfactory.typings import Layer
 from gdsfactory.config import print_version_pdks, print_version_plugins
 
-def disp_layers():
-    for i in PDK.layers:
-        print(i, PDK.layers[i])
+from classes import *
 
-print("Using "+PDK.name+"'s PDK\n")
-disp_layers()
+top = gf.Component("TOP")
+mmi1 = AMF_1x2MMI_CBand()
+mmi2 = AMF_1x2MMI_CBand()
 
+
+mmi1_r = top.add_ref(mmi1.inst)
+mmi2_r = top.add_ref(mmi2.inst).movex(120)
+
+route = gf.routing.get_route(mmi1_r.ports["o2"], mmi2_r.ports["o1"])
+
+top.add(route.references)
+
+top.show()

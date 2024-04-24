@@ -125,15 +125,16 @@ class SecondOrderRing(Cell):
         self.inst.add_ref(wg.inst).movey(d[1] + self.rings[1].radius + self.gaps[2] + self.width)
 
 class MMI1x2Stage(Cell):
-    def __init__(self, stage_=2, dy_=50, mmi_=[AMF_1x2MMI_CBand() for i in range(100)],
-                  name_="MMI_1x2_stage"):
+    def __init__(self, stage_=2, dy_=50, n_mmis_=4,
+                  name_="AMF_1x2_MMI"):
         self.stage = stage_
         self.name = name_+"_"+str(self.stage)
         self.dy = dy_
-        self.mmis = mmi_[:int(2**(self.stage-1))]
+        if self.name == "AMF_1x2_MMI"+"_"+str(self.stage):
+            self.mmis = [AMF_1x2MMI_CBand() for i in range(n_mmis_)]
         self.inst = gf.Component()
-        for i in range(int(2**(self.stage-1))):
-            self.inst.add_ref(self.mmis[i].inst).movey(i*self.dy)
+        for c,v in enumerate(self.mmis):
+            self.inst.add_ref(v.inst).movey(c*self.dy)
 
 class MMIFanout(Cell):
     def __init__(self, stages_=[MMI1x2Stage(1), MMI1x2Stage(2),
@@ -145,39 +146,13 @@ class MMIFanout(Cell):
         self.dx = dx_
         for c,v in enumerate(self.stages):
             self.inst.add_ref((self.stages[c]).inst).movex(c*self.dx)
-
 """
 TOP = gf.Component()
-mmi_fanout_obj = MMIFanout()      
-TOP.add_ref(mmi_fanout_obj.inst)
+mmis = MMI1x2Stage()
 
-for i in mmi_fanout_obj.stages:
-    for j in i.mmis:
-        print(j)
+print(mmis.mmis)
 
-route = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o2"],
-                                        mmi_fanout_obj.stages[1].mmis[0].comp.ports["o1"])
-route2 = gf.routing.get_route(mmi_fanout_obj.stages[0].mmis[0].comp.ports["o3"],
-                                        mmi_fanout_obj.stages[1].mmis[1].comp.ports["o1"])
-route3 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[0].comp.ports["o2"],
-                                        mmi_fanout_obj.stages[2].mmis[0].comp.ports["o1"])
-route4 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[0].comp.ports["o3"],
-                                        mmi_fanout_obj.stages[2].mmis[1].comp.ports["o1"])
-route5 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[1].comp.ports["o2"],
-                                        mmi_fanout_obj.stages[2].mmis[2].comp.ports["o1"])
-route6 = gf.routing.get_route(mmi_fanout_obj.stages[1].mmis[1].comp.ports["o3"],
-                                        mmi_fanout_obj.stages[2].mmis[3].comp.ports["o1"])
-
-TOP.add(route2.references)
-TOP.add(route3.references)
-TOP.add(route4.references)
-TOP.add(route5.references)
-TOP.add(route6.references)
-
-TOP.add(route.references)
+TOP.add_ref(mmis.inst)
 TOP.show()
 
-
 """
-
-
