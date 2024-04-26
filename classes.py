@@ -77,7 +77,7 @@ class Ring(Cell):
         self.inst = gf.Component(name_)
         self.inst.add_ref(gf.components.ring(radius=radius_, width=width_, layer=layer_))
 
-"""Definition of the Straight Wavguide cell"""
+"""Definition of the Straight Waveguide cell"""
 class Straight(Cell):
     def __init__(self, name_="S", length_=10, width_=0.5, layer_="RIB_"):
         self.length = length_
@@ -133,8 +133,10 @@ class MMI1x2Stage(Cell):
         if self.name == "AMF_1x2_MMI"+"_"+str(self.stage):
             self.mmis = [AMF_1x2MMI_CBand() for i in range(n_mmis_)]
         self.inst = gf.Component()
+        self.insts = []
         for c,v in enumerate(self.mmis):
-            self.inst.add_ref(v.inst).movey(c*self.dy)
+            self.insts.append(self.inst.add_ref(v.inst).movey(c*self.dy))
+
 
 class MMIFanout(Cell):
     def __init__(self, stages_=[MMI1x2Stage(1), MMI1x2Stage(2),

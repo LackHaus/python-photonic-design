@@ -21,4 +21,9 @@ from gdsfactory.config import print_version_pdks, print_version_plugins
 
 from classes import *
 
-ring = SecondOrderRing().inst.show()
+top = gf.Component("TOP")
+
+edge_coupler = AMF_EdgeCoupler_CBand().comp
+edge_coupler = top.add_ref(edge_coupler)
+
+top.show()
