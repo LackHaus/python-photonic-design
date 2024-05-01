@@ -150,5 +150,10 @@ for i in range(len(pbrc)):
 top.show()
 
 # PD array 
-
+origin[0] = origin[0] + 350
+origin[1] = origin[1]
 pds = []
+scaling_y = 1.1
+bend = 10
+
+
