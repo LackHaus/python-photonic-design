@@ -55,7 +55,7 @@ class AMF_1x2MMI_CBand(Cell):
         self.y = y_
         self.inst = PDK.get_component(self.name)
 
-
+#PDK.get_component(AMF_Si_1X2MMI_Cband_v3p0_SiEPIC)
 class AMF_PBRS_CBand(Cell):
     def __init__(self, name_="AMF_Si_PBRS_Cband_v3p0_SiEPIC", x_=251.3, y_=100) :
         self.name = name_
