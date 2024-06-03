@@ -54,5 +54,22 @@ def FanOut(ch=32, dx=200, dy=100, port_misalignment=0.9, rmin=10, dr=1, w=0.5):
         c.add_port("ch"+str(2*j), port=fanout_cells[-1][j].ports["o3"])
         c.add_port("ch"+str(2*j+1), port=fanout_cells[-1][j].ports["o2"])
     return c
-    
-SecondOrderRing(20, 2, 1).show()
+
+@gf.cell
+def PBRS_Pairs(ch=32, dy=300, sep=150):
+    c = gf.Component()
+    pbrs_cells = []
+    for i in range(ch):
+        
+        pbrs_cells.append(c.add_ref(PDK.get_component("AMF_Si_PBRS_Cband_v3p0")).movey(i*dy))
+    for cc,v in enumerate(pbrs_cells):
+        c.add_port("in"+str(cc), port=v.ports["o1"])
+        c.add_port("bot"+str(cc), port=v.ports["o3"])
+        c.add_port("top"+str(cc), port=v.ports["o2"])
+    return c
+x = PBRS_Pairs(ch=8)
+x.show()
+print(len(x.ports))
+
+
+
