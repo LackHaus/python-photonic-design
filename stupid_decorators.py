@@ -60,16 +60,32 @@ def PBRS_Pairs(ch=32, dy=300, sep=150):
     c = gf.Component()
     pbrs_cells = []
     for i in range(ch):
-        
         pbrs_cells.append(c.add_ref(PDK.get_component("AMF_Si_PBRS_Cband_v3p0")).movey(i*dy))
     for cc,v in enumerate(pbrs_cells):
         c.add_port("in"+str(cc), port=v.ports["o1"])
         c.add_port("bot"+str(cc), port=v.ports["o3"])
         c.add_port("top"+str(cc), port=v.ports["o2"])
     return c
-x = PBRS_Pairs(ch=8)
-x.show()
-print(len(x.ports))
 
+
+@gf.cell
+def RingHeater(r=10, l=(115,0), w=1):
+    c = gf.Component()
+
+    ring = gf.components.ring(r, layer=(-1,0), width=w)
+    
+    rect_top = gf.components.rectangle(size=(r,r+5), layer=(-1,0))
+    rect_bot = gf.components.rectangle(size=(r/2,r+5), layer=(-1,0))
+
+    c.add_ref(gf.geometry.boolean(A=ring, B=rect_top, operation="not", layer=l))
+    c.add_ref(gf.geometry.boolean(A=ring, B=rect_bot, operation="not", layer=l))
+    
+    
+
+
+    return c
+
+
+RingHeater().show()
 
 
