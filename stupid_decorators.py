@@ -78,15 +78,20 @@ return c
 """
 
 @gf.cell
-def RingHeater(r=10, l=(115,0), w=1):
+def RingHeater(r=10, l=(115,0), w=1, ring_opening=5, pad_size=(2, 5), multi_stage = True):
     c = gf.Component()
     a = gf.Component()
-    rect_top = a.add_ref(gf.components.rectangle(size=(r,r), layer=(-1,0)))
-    rect_bot = a.add_ref(gf.components.rectangle(size=(r,r), layer=(-1,0))).move((-2, -5))
-    rect_cut = gf.geometry.boolean(A=rect_top, B=rect_bot, operation="A-B", layer=l)
+    big_ring = a.add_ref(gf.components.ring(r, layer=(1,0), width=w))
+    rect = a.add_ref(gf.components.rectangle(size=(ring_opening, r), layer=(2,0))).move((-ring_opening/2, -r-ring_opening))
+    rect_cut = gf.geometry.boolean(A=big_ring, B=rect, operation="A-B", layer=l)
+    pad_left = c.add_ref(gf.components.rectangle(size=pad_size, layer=l)).move((-ring_opening/2, -pad_size[1] - np.sqrt((r-w/2)**2 - (ring_opening/2)**2)))
+    pad_right = c.add_ref(gf.components.rectangle(size=pad_size, layer=l)).move((ring_opening/2 - pad_size[0], -pad_size[1] - np.sqrt((r-w/2)**2 - (ring_opening/2)**2)))
     c.add_ref(rect_cut)
+
+    if multi_stage:
+        
     return c
 
 RingHeater().show()
 
-
+#-pad_size[1]-np.sqrt((r-w)**2  - (ring_opening/2)**2
